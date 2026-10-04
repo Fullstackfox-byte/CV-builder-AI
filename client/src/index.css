@@ -1,0 +1,33 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html { scroll-behavior: smooth; }
+  body { @apply bg-slate-50 font-sans text-slate-800 antialiased; }
+}
+
+@layer components {
+  .input { @apply w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-sm outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-100; }
+  .input-error { @apply border-red-400 focus:border-red-500 focus:ring-red-100; }
+  .label { @apply mb-1.5 block text-xs font-semibold uppercase tracking-wide text-slate-500; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition active:scale-[.98] disabled:cursor-not-allowed disabled:opacity-50; }
+  .btn-primary { @apply btn bg-brand-600 text-white shadow-sm hover:bg-brand-700; }
+  .btn-ghost { @apply btn border border-slate-200 bg-white text-slate-700 hover:bg-slate-50; }
+  .btn-sm { @apply px-3 py-1.5 text-xs; }
+  .card { @apply rounded-2xl border border-slate-200 bg-white p-5 shadow-sm; }
+  .chip { @apply inline-flex items-center gap-1 rounded-full border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-700; }
+  .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+}
+
+/* ---------- Print / PDF export (A4) ---------- */
+#print-root { display: none; }
+@page { size: A4; margin: 14mm; }
+@media print {
+  html, body { background: #fff !important; }
+  #root { display: none !important; }
+  #print-root { display: block !important; }
+  .cv-sheet { box-shadow: none !important; width: auto !important; min-height: 0 !important; padding: 0 !important; background: #fff !important; zoom: 1 !important; }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+}

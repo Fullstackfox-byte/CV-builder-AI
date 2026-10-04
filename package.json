@@ -1,0 +1,13 @@
+{
+  "name": "cv-builder-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CVForge AI - AI-powered CV / Resume Builder (MERN)",
+  "scripts": {
+    "install:all": "npm install && npm install --prefix client && npm install --prefix server",
+    "dev": "concurrently -n server,client -c blue,green \"npm run dev --prefix server\" \"npm run dev --prefix client\"",
+    "build": "npm run build --prefix client",
+    "start": "npm start --prefix server"
+  },
+  "devDependencies": { "concurrently": "^9.0.1" }
+}
