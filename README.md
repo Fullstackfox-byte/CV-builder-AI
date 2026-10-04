@@ -1,84 +1,224 @@
-# CVForge AI - AI-powered CV / Resume Builder
+<div align="center">
 
-A full-stack (MERN) AI career assistant: the user enters basic information, an AI interview asks smart follow-up
-questions, and the app produces an ATS-friendly CV with live A4 preview, 4 templates, job-specific optimization
-and PDF export.
+# CVForge AI
 
-**Flow:** Basic info -> AI interview -> AI analysis -> Professional CV -> Live preview -> ATS optimization -> PDF
+**An AI-powered CV / resume builder that interviews you, writes ATS-friendly content, and exports a clean A4 PDF.**
+
+![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/Vite-5-646CFF?logo=vite&logoColor=white)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-06B6D4?logo=tailwindcss&logoColor=white)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=nodedotjs&logoColor=white)
+![Express](https://img.shields.io/badge/Express-4-000000?logo=express&logoColor=white)
+![MongoDB](https://img.shields.io/badge/MongoDB-optional-47A248?logo=mongodb&logoColor=white)
+
+</div>
+
+---
+
+## Overview
+
+CVForge AI guides you from raw details to a polished, recruiter-ready CV:
+
+**Profession → Basic info → Education → Skills → Projects → Experience → Achievements → AI interview → AI-generated CV → Live preview → Job optimization → PDF**
+
+The AI never invents facts. It only rewrites and structures what you provide, which keeps your CV honest and safe to submit.
 
 ## Features
-- Landing page, 7-step guided form with validation (email, phone, URLs, date ranges) and auto-save
-- AI follow-up interview (questions depend on previous answers, ask for numbers, never repeat)
-- AI tools next to text fields: Improve Writing, More Professional, Concise, Action Verbs, ATS, Bullet Points
-- Project / experience bullet generation, professional summary, career objective
-- Split-screen editor: live A4 preview, zoom, fit, fullscreen, template switcher, font size, spacing, section reordering
-- Templates: Modern, Minimal, Corporate, Developer (single-column, real text, ATS friendly)
-- "Optimize for Job": keyword match, missing skills, job-specific summary, **estimated** ATS score
-- Dashboard with multiple CV versions (Frontend Developer CV, Internship CV, ...), duplicate, delete
-- Print / Download PDF (A4, selectable text), Save Draft, privacy page
-- The AI never invents facts: it only rewrites what the user provided
 
-## Project structure
+- **Profession-aware wizard**: 7-step guided form that adapts labels and sections for Engineering, Doctor, Nurse, Lawyer, Teacher, Business, and Other.
+- **AI follow-up interview**: asks one smart question at a time based on your previous answers and pushes for measurable results.
+- **AI writing tools** next to text fields: Improve Writing, More Professional, Concise, Strong Action Verbs, Improve for ATS, Generate Bullet Points (with one-level undo).
+- **Auto-generation**: professional summary, career objective, project and experience bullet points, and skill grouping.
+- **Live editor**: split-screen A4 preview with zoom, fit-to-width, fullscreen, font size, spacing, and section reordering.
+- **7 ATS-friendly templates**: Modern, Minimal, Corporate, Developer, Clinical, Legal, Academic (single column, real selectable text).
+- **Optimize for Job**: paste a job description to get a keyword match score, matched and missing keywords, suggestions, and a job-specific summary.
+- **Multiple CV versions**: dashboard to create, duplicate, rename, and delete CVs (for example "Frontend CV", "Internship CV").
+- **Validation and auto-save**: email, phone, URL, and date checks; drafts survive refreshes.
+- **Works offline from AI**: a built-in rule-based engine is used automatically when no API key is set or the AI provider fails.
+- **Privacy-minded**: photo and registration numbers are never sent to the AI; API keys stay on the server.
+
+## Tech Stack
+
+| Layer | Technology |
+|---|---|
+| Frontend | React 18, Vite, Tailwind CSS, React Router, Lucide icons |
+| Backend | Node.js, Express, Helmet, CORS, express-rate-limit, Morgan |
+| Database | MongoDB with Mongoose (optional) |
+| AI | Anthropic API, or any OpenAI-compatible API (OpenAI, OpenRouter, ...) with local fallback |
+
+## Project Structure
+
 ```
 cv-builder-ai/
-|-- client/                 React + Vite + Tailwind
-|   `-- src/
-|       |-- components/     UI (CVDocument = all templates, Interview, AIText, steps/...)
-|       |-- pages/          Landing, Wizard, Editor, Dashboard, Privacy
-|       |-- layouts/        MainLayout
-|       |-- hooks/          useReveal
-|       |-- services/       api.js (all HTTP calls)
-|       |-- context/        CVContext (state + autosave), ToastContext
-|       `-- utils/          validators, helpers, default/sample CV
-|-- server/                 Node + Express + MongoDB
-|   |-- controllers/        cvController, aiController
-|   |-- models/             CV
-|   |-- routes/             cvRoutes, aiRoutes
-|   |-- middleware/         clientId, requireDB, sanitize, error
-|   |-- services/
-|   |   |-- aiService.js    AI abstraction (generateProfessionalSummary, generateProjectBullets, ...)
-|   |   |-- llm.js          provider client (Anthropic / OpenAI-compatible)
-|   |   `-- localAI.js      offline rule-based engine (works with no API key)
-|   |-- utils/              textTools, keywords
-|   |-- config/             env, db
-|   `-- server.js
-|-- .env  /  .env.example
-`-- README.md
+├── client/                     React + Vite + Tailwind
+│   └── src/
+│       ├── components/         UI (CVDocument = all templates, Interview, AIText, steps/)
+│       ├── pages/              Landing, Wizard, Editor, Dashboard, Privacy
+│       ├── layouts/            MainLayout
+│       ├── context/            CVContext (state + autosave), ToastContext
+│       ├── services/           api.js (all HTTP calls)
+│       ├── hooks/              useReveal
+│       └── utils/              validators, helpers, default and sample CV
+├── server/                     Node + Express (+ MongoDB)
+│   ├── controllers/            cvController, aiController
+│   ├── models/                 CV
+│   ├── routes/                 cvRoutes, aiRoutes
+│   ├── middleware/             clientId, requireDB, sanitize, error
+│   ├── services/
+│   │   ├── aiService.js        AI abstraction layer
+│   │   ├── llm.js              provider client (Anthropic / OpenAI-compatible)
+│   │   └── localAI.js          offline rule-based engine
+│   ├── utils/                  textTools, keywords
+│   ├── config/                 env, db
+│   └── server.js
+├── .env.example
+└── README.md
 ```
 
-## Quick start
-Requirements: Node 18+ (MongoDB optional).
+## Getting Started
+
+### Prerequisites
+
+- Node.js 18 or newer
+- MongoDB (optional; the app works without it)
+
+### Installation
+
 ```bash
-npm run install:all        # installs root, client and server dependencies
-npm run dev                # starts API (http://localhost:5000) + client (http://localhost:5173)
-```
-Open http://localhost:5173.
+git clone https://github.com/<your-username>/cv-builder-ai.git
+cd cv-builder-ai
 
-- **Without MongoDB:** CVs are saved in the browser (localStorage). Remove or leave `MONGO_URI`; the server just warns.
-- **With MongoDB:** CVs are also synced to the database under an anonymous client id.
+# install root, client and server dependencies
+npm run install:all
 
-## Connecting a real AI
-Edit the root `.env` (server-side only - keys are never exposed to the browser):
+# create your environment file
+cp .env.example .env
 ```
-AI_PROVIDER=anthropic        # or openai (any OpenAI-compatible API; set AI_BASE_URL if needed)
-AI_API_KEY=your-key
-AI_MODEL=                    # optional; sensible default per provider
-```
-Restart the server. If the provider fails, the app falls back to the local engine automatically.
-All responses are structured JSON with a `source` field (`"ai"` or `"local"`).
-To add another provider, only edit `server/services/llm.js`.
 
-## API
-| Method | Route | Purpose |
+### Run in development
+
+```bash
+npm run dev
+```
+
+- Client: http://localhost:5173
+- API: http://localhost:5000
+- Health check: http://localhost:5000/api/health
+
+### Production build
+
+```bash
+npm run build     # builds the client into client/dist
+npm start         # starts the API server
+```
+
+## Configuration
+
+All settings live in a single `.env` file at the project root.
+
+| Variable | Description | Default |
 |---|---|---|
-| POST | `/api/ai/summary` `/objective` `/project-bullets` `/experience-bullets` `/follow-up` `/improve` `/optimize` `/full-cv` | AI features |
-| GET/PUT/DELETE | `/api/cvs`, `/api/cvs/:cvId` | CV storage (needs MongoDB + `x-client-id` header) |
-| GET | `/api/health` | status |
+| `PORT` | API port | `5000` |
+| `CLIENT_URL` | Allowed CORS origin(s), comma-separated | `http://localhost:5173` |
+| `MONGO_URI` | MongoDB connection string (optional) | none |
+| `AI_PROVIDER` | `local`, `anthropic`, or `openai` | `local` |
+| `AI_API_KEY` | Provider API key (server-side only) | none |
+| `AI_MODEL` | Model name (optional, sensible default per provider) | none |
+| `AI_BASE_URL` | Custom API base URL (optional) | none |
+
+> **Never commit your `.env` file.** It is already listed in `.gitignore`.
+
+### Connecting an AI provider
+
+**Local engine (no key needed)**
+```env
+AI_PROVIDER=local
+```
+
+**Anthropic**
+```env
+AI_PROVIDER=anthropic
+AI_API_KEY=your-key
+```
+
+**OpenAI-compatible (example: OpenRouter)**
+```env
+AI_PROVIDER=openai
+AI_API_KEY=your-key
+AI_BASE_URL=https://openrouter.ai/api/v1
+AI_MODEL=your-model-name
+```
+
+If the provider fails or times out, the app silently falls back to the local engine. Every AI response includes a `source` field (`"ai"` or `"local"`) so you always know which engine produced it. To add another provider, edit only `server/services/llm.js`.
+
+> Some free models do not support JSON mode reliably. If results look basic, check the server logs for `[ai] ... failed` warnings.
+
+## Data Storage
+
+- **Without MongoDB:** CVs are stored in the browser (`localStorage`).
+- **With MongoDB:** CVs are also synced to the database under an anonymous client ID (`x-client-id` header), so they can be restored in the same browser profile.
+
+## API Reference
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| `GET` | `/api/health` | Server, database, and AI status |
+| `POST` | `/api/ai/summary` | Generate professional summary |
+| `POST` | `/api/ai/objective` | Generate career objective |
+| `POST` | `/api/ai/project-bullets` | Bullets for a project |
+| `POST` | `/api/ai/experience-bullets` | Bullets for a job or internship |
+| `POST` | `/api/ai/follow-up` | Next interview question |
+| `POST` | `/api/ai/improve` | Improve text (`improve`, `professional`, `concise`, `verbs`, `ats`, `bullets`) |
+| `POST` | `/api/ai/optimize` | Job-description match, score, and suggestions |
+| `POST` | `/api/ai/full-cv` | Generate full CV content from all answers |
+| `GET` | `/api/cvs` | List saved CVs (needs MongoDB) |
+| `GET` `PUT` `DELETE` | `/api/cvs/:cvId` | Read, save, or delete a CV (needs MongoDB) |
 
 ## Exporting a PDF
-"Download PDF" opens the browser print dialog with the CV laid out for A4 (14 mm margins). Choose
-**Save as PDF**, keep margins on *Default* and turn off *Headers and footers*. Text stays selectable, which is what ATS parsers need.
 
-## Notes
-- The ATS match score is a keyword-overlap **estimate**, not a guarantee.
-- Auth is intentionally omitted (anonymous client id). For production add real authentication, HTTPS and stricter rate limits.
+Click **Download PDF** to open the browser print dialog with the CV laid out for A4 (14 mm margins). Then:
+
+1. Choose **Save as PDF** as the destination
+2. Keep margins on **Default**
+3. Turn **Headers and footers** off
+
+Text stays selectable, which is what ATS parsers need.
+
+## How the ATS Score Works
+
+The score is a transparent, deterministic **keyword-overlap estimate** between your CV and the job description. It highlights matched and missing keywords so you can improve your CV truthfully. It is **not** a guarantee of how any real ATS or recruiter will rate you. Only add skills you genuinely have.
+
+## Security Notes
+
+- API keys are read from server-side environment variables and are never exposed to the browser.
+- Request bodies are sanitized against NoSQL operator injection.
+- Helmet, CORS allow-list, body size limit (2 MB), and a rate limit (120 requests/minute per IP) are enabled.
+- Authentication is intentionally omitted (anonymous client ID). For production, add real authentication, HTTPS, and stricter limits on `/api/ai/*`.
+
+## Roadmap
+
+- [ ] User accounts and authentication
+- [ ] Server-side PDF generation
+- [ ] Cover letter generator
+- [ ] Stricter per-user AI rate limiting
+- [ ] Import an existing CV (PDF / DOCX)
+- [ ] More templates and color themes
+
+## Contributing
+
+Contributions are welcome.
+
+1. Fork the repository
+2. Create a branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m "Add your feature"`
+4. Push the branch: `git push origin feature/your-feature`
+5. Open a Pull Request
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for details.
+
+## Author
+
+**Your Name**
+GitHub: [@your-username](https://github.com/your-username)
